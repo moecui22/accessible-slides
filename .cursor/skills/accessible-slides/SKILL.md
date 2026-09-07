@@ -4,7 +4,7 @@ description: "Audit and fix slides, posters and figures so people with vision lo
 license: MIT
 metadata:
   author: moecui22
-  version: "0.2.0"
+  version: "0.3.0"
 compatibility: "Requires Python 3. simulate_cvd.py also needs numpy and Pillow."
 ---
 

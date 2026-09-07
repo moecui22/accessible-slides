@@ -24,9 +24,14 @@ Works with any harness that reads the Agent Skills format.
 
 ```bash
 git clone https://github.com/moecui22/accessible-slides.git
-mkdir -p ~/.claude/skills
-cp -R accessible-slides ~/.claude/skills/accessible-slides
+mkdir -p ~/.claude/skills/accessible-slides
+cp -R accessible-slides/{SKILL.md,references,scripts} ~/.claude/skills/accessible-slides/
 ```
+
+Copy those three paths, not the whole repo. The repo also carries assets, tests
+and two packaging copies of the skill; putting all of that in `~/.claude/skills`
+adds about 3 MB and leaves duplicate `SKILL.md` files nested inside the skill
+directory, which can register as extra skills.
 
 Check it registered with `/plugin list` or by asking Claude to list its skills.
 
@@ -34,12 +39,12 @@ Check it registered with `/plugin list` or by asking Claude to list its skills.
 
 ```bash
 git clone https://github.com/moecui22/accessible-slides.git
-mkdir -p .cursor/skills
-cp -R accessible-slides .cursor/skills/accessible-slides
+mkdir -p .cursor/skills/accessible-slides
+cp -R accessible-slides/{SKILL.md,references,scripts} .cursor/skills/accessible-slides/
 ```
 
-The repo also ships a ready-made copy under `.cursor/skills/`, so cloning into
-your project puts it in the right place already.
+The repo also ships a ready-made copy under `.cursor/skills/`, so cloning it
+into your project puts the skill in the right place already.
 
 ## Any other agent
 

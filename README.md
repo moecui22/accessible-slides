@@ -14,7 +14,11 @@ a legend.
 
 ![The fixed version in blue and orange, with dashed lines and direct labels](assets/hero_after.png)
 
-**[Try it in your browser](https://moecui22.github.io/accessible-slides/)** — drop in a slide and see the four panels, the contrast numbers and the minimum font size, with nothing uploaded anywhere.
+**[Try it in your browser](https://moecui22.github.io/accessible-slides/)** — drop
+in a slide and see the four panels, the contrast numbers and the minimum font
+size. Nothing is uploaded anywhere; it runs entirely in the page. CI checks the
+demo's arithmetic against the Python on every push, so the browser and the
+command line cannot drift apart.
 
 ---
 
@@ -149,6 +153,12 @@ where possible, with DOIs listed for the paywalled ones.
 
 If you use this in published work, please cite it. GitHub builds a citation from
 `CITATION.cff` via the "Cite this repository" button in the sidebar.
+
+## Also by me
+
+**[spit-it-out](https://github.com/moecui22/spit-it-out)** — makes a coding
+agent put the answer in the first line, without letting brevity delete or invent
+anything. Blind-graded against the alternatives.
 
 ## License
 

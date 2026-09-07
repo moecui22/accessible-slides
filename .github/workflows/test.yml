@@ -10,6 +10,8 @@ jobs:
           python-version: '3.11'
       - name: Check the maths against published reference values
         run: python3 tests/test_audit.py
+      - name: Check the browser demo still matches the Python
+        run: node tests/test_demo_parity.js
       - name: Check the packaging copies have not drifted
         run: |
           ./sync.sh
