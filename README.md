@@ -1,7 +1,7 @@
 # Accessible Slides
 
 **A coding-agent skill that checks slides, posters and figures against how vision
-actually works — not against how they looked on your monitor.**
+actually works: not against how they looked on your monitor.**
 
 ![Before: a red/green line chart, simulated for colour-vision deficiency](assets/hero_before.png)
 
@@ -20,9 +20,9 @@ survives every simulation:
 
 Point it at a deck, a poster or a figure. It reports, per slide:
 
-- **Colour-vision failures** — pairs of meaning-bearing colours that collapse
+- **Colour-vision failures** - pairs of meaning-bearing colours that collapse
   under protanopia or deuteranopia, measured as ΔE2000 after simulation
-- **Contrast failures** — with a threshold raised for projection, because
+- **Contrast failures** - with a threshold raised for projection, because
   ambient light lifts the black level and WCAG's numbers assume a monitor
 - **Text too small** — converted from real room geometry into a minimum font
   size, instead of the folk "30-point rule"
