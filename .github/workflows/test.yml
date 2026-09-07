@@ -1,0 +1,16 @@
+name: test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check the maths against published reference values
+        run: python3 tests/test_audit.py
+      - name: Check the packaging copies have not drifted
+        run: |
+          ./sync.sh
+          git diff --exit-code || (echo "sync.sh produced changes; run it and commit" && exit 1)
