@@ -45,29 +45,12 @@ Then it tells you what to change. Not just a score.
 
 ## Install
 
-**Fastest:**
-
 ```bash
 npx skills add moecui22/accessible-slides
 ```
 
-**Claude Code plugin:**
-
-```
-/plugin marketplace add moecui22/accessible-slides
-/plugin install accessible-slides@accessible-slides
-```
-
-**Manual:**
-
-```bash
-git clone https://github.com/moecui22/accessible-slides.git
-mkdir -p ~/.claude/skills
-cp -R accessible-slides ~/.claude/skills/accessible-slides
-```
-
-**Other agents:** point yours at `SKILL.md`. It is plain Markdown and two Python
-scripts, nothing Claude-specific.
+Claude Code, Cursor, other agents, or no agent at all: see
+**[INSTALL.md](INSTALL.md)**.
 
 ## How to use it
 
@@ -168,3 +151,8 @@ If you use this in published work, please cite it. GitHub builds a citation from
 ## License
 
 MIT
+
+---
+
+If this stops one deck from being unreadable at the back of the room, a star
+helps other people find it.
