@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Accessible Slides: vision-science checks for slides, posters and figures"
+abstract: >-
+  A coding-agent skill that audits presentations, conference posters and
+  scientific figures for readers with vision loss. Checks colour-vision
+  deficiency using dichromat simulation and CIEDE2000 separability, contrast
+  against projection-adjusted thresholds, and text size derived from room
+  geometry rather than rules of thumb.
+type: software
+authors:
+  - family-names: Cui
+    given-names: Eric
+    affiliation: >-
+      Rotman Research Institute, Baycrest Academy for Research and Education;
+      Department of Psychology, University of Toronto
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+repository-code: "https://github.com/moecui22/accessible-slides"
+url: "https://github.com/moecui22/accessible-slides"
+license: MIT
+version: 0.1.0
+date-released: "2026-09-07"
+keywords:
+  - accessibility
+  - colour vision deficiency
+  - contrast sensitivity
+  - low vision
+  - data visualization
+  - scientific communication
+  - agent skills

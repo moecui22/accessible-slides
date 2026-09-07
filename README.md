@@ -157,6 +157,12 @@ Stated plainly, because accessibility tools that overclaim are worse than none:
 - Okabe & Ito (2008) — colour universal design palette
 - W3C — WCAG 2.2
 
+## Citing this
+
+If this is useful in work you publish, please cite it. GitHub will generate a
+formatted citation from `CITATION.cff` via the "Cite this repository" button in
+the sidebar.
+
 ## License
 
 MIT
