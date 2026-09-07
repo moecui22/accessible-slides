@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "accessible-slides",
+  "description": "Audit and fix slides, posters and figures for readers with vision loss.",
+  "owner": {
+    "name": "moecui22",
+    "url": "https://github.com/moecui22"
+  },
+  "plugins": [
+    {
+      "name": "accessible-slides",
+      "description": "Checks decks against colour-vision deficiency, projected contrast, and text size at real viewing distance. Vision-science thresholds, not a WCAG checklist.",
+      "source": "./plugins/accessible-slides",
+      "category": "productivity",
+      "tags": ["accessibility", "slides", "presentations", "color-blindness", "contrast", "wcag", "data-visualization"]
+    }
+  ]
+}

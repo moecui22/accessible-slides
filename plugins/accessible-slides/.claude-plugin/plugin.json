@@ -1,0 +1,12 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "accessible-slides",
+  "version": "0.1.0",
+  "description": "Audit and fix slides, posters and figures for readers with vision loss.",
+  "author": {
+    "name": "moecui22",
+    "url": "https://github.com/moecui22"
+  },
+  "license": "MIT",
+  "keywords": ["accessibility", "slides", "color-blindness", "contrast", "low-vision"]
+}
