@@ -1,6 +1,6 @@
 ---
 name: accessible-slides
-description: "Audit and fix slides, posters and figures so people with vision loss can actually read them — colour-vision deficiency, reduced contrast sensitivity, and text too small to resolve from the back of the room. Use when making, reviewing or fixing a presentation, conference poster or chart, and whenever accessibility, colour blindness, contrast, readability, WCAG, Section 508 or AODA come up."
+description: "Audit and fix slides, posters and figures so people with vision loss can actually read them - colour-vision deficiency, reduced contrast sensitivity, and text too small to resolve from the back of the room. Use when making, reviewing or fixing a presentation, conference poster or chart, and whenever accessibility, colour blindness, contrast, readability, WCAG, Section 508 or AODA come up."
 license: MIT
 ---
 
@@ -28,18 +28,18 @@ looked on the author's monitor.
 ## Operating procedure
 
 **When creating new slides:** apply the rules as you build. Do not generate a
-deck and audit it afterwards — the fixes get structural fast.
+deck and audit it afterwards - the fixes get structural fast.
 
 **When auditing an existing deck:**
 
 1. Establish the room. Ask, or assume:
    - default: 2.0 m screen height, back row at 15 m
-   - screen share / webinar: a 0.3 m display at 0.6 m — plain WCAG applies
+   - screen share / webinar: a 0.3 m display at 0.6 m - plain WCAG applies
 2. Extract the palette and the text sizes.
    - `.pptx` → `python-pptx`
    - HTML deck → read the CSS
    - PDF or images only → render pages to PNG, then use `scripts/simulate_cvd.py`
-3. Run `scripts/audit.py` for the numbers. Never judge contrast by eye — that is
+3. Run `scripts/audit.py` for the numbers. Never judge contrast by eye - that is
    the exact judgement the author already got wrong.
 4. Run `scripts/simulate_cvd.py` on at least one rendered slide and actually look
    at the output.
@@ -47,7 +47,7 @@ deck and audit it afterwards — the fixes get structural fast.
 
 ## The rules
 
-### Rule 1 — Hue is never the only channel
+### Rule 1 - Hue is never the only channel
 
 Every distinction must survive being converted to greyscale. Add a second,
 redundant channel:
@@ -59,7 +59,7 @@ redundant channel:
 When colour must carry category, use a CVD-safe palette. Okabe–Ito is the
 default. See `references/palettes.md`.
 
-### Rule 2 — Projection contrast sits above the WCAG floor
+### Rule 2 - Projection contrast sits above the WCAG floor
 
 | Context | Body text | Large text (≥ 2× body) |
 |---|---|---|
@@ -74,7 +74,7 @@ only when the room is known to be dark.
 Never set body text directly on a photograph. Use a solid or heavily blurred
 plate.
 
-### Rule 3 — Size text by visual angle, not by taste
+### Rule 3 - Size text by visual angle, not by taste
 
 Target **16–20 arcmin of x-height at the back row.**
 
@@ -83,11 +83,11 @@ normal vision (~12 arcmin), leaving headroom for age-related acuity loss and for
 a viewer who is not perfectly corrected.
 
 `scripts/audit.py --room` converts this into a minimum font size for the actual
-room. For a 2 m screen with a back row at 15 m it lands near 6% of slide height
-— which is where the folk "30-point rule" comes from. This tool derives that
+room. For a 2 m screen with a back row at 15 m it lands near 6% of slide height,
+which is where the folk "30-point rule" comes from. This tool derives that
 number instead of asserting it, and moves it when the room changes.
 
-### Rule 4 — Colour pairs stay separable after simulation
+### Rule 4 - Colour pairs stay separable after simulation
 
 Any two colours carrying different meanings must remain distinguishable when
 simulated as protanopia and deuteranopia. Target **ΔE2000 ≥ 15** between every
@@ -111,16 +111,16 @@ End with the single highest-impact change. Not a list of twelve.
 
 Read these only on reaching the relevant step:
 
-- `references/vision-loss.md` — what each condition does, and who has it
-- `references/palettes.md` — CVD-safe palettes, and what to stop using
-- `references/checks.md` — thresholds, their sources, how to apply them
-- `references/fixes.md` — the standard fix for each failure mode
+- `references/vision-loss.md` - what each condition does, and who has it
+- `references/palettes.md` - CVD-safe palettes, and what to stop using
+- `references/checks.md` - thresholds, their sources, how to apply them
+- `references/fixes.md` - the standard fix for each failure mode
 
 ## Scripts
 
-- `scripts/audit.py` — contrast ratios, CVD confusability (ΔE2000), and minimum
+- `scripts/audit.py` - contrast ratios, CVD confusability (ΔE2000), and minimum
   text size from room geometry. Standard library only.
-- `scripts/simulate_cvd.py` — render an image as protan / deutan / tritan and
+- `scripts/simulate_cvd.py` - render an image as protan / deutan / tritan and
   build a labelled contact sheet. Needs `numpy` and `Pillow`.
 
 ## Credits

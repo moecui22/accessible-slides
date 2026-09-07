@@ -35,7 +35,7 @@ legibility barely, and it fails completely on a busy background.
 
 Do not shrink the font to fit the content. Cut the content.
 
-If a slide needs 12 pt to fit, it is not a slide — it is a handout. Split it,
+If a slide needs 12 pt to fit, it is not a slide - it is a handout. Split it,
 move the detail to an appendix, or say the sentence out loud instead of writing
 it.
 

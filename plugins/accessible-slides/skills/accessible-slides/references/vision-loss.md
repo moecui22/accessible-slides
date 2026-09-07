@@ -19,7 +19,7 @@ because for them it is dark-on-dark, not just a different colour.
 
 This is the one that matters for the largest number of people and gets the least
 attention. Contrast sensitivity declines steadily from roughly the fourth decade
-and the loss is largest at middle and high spatial frequencies — exactly the band
+and the loss is largest at middle and high spatial frequencies - exactly the band
 that carries letter shapes.
 
 Contributing causes, all common: lens yellowing and light scatter (early
@@ -35,7 +35,7 @@ to disappear.
 
 Normal acuity (6/6, 20/20) resolves a 1 arcmin gap; the standard letter subtends
 5 arcmin. But threshold is not reading. Maximum reading speed needs print well
-above threshold — a critical print size of roughly 0.2° (12 arcmin) of x-height
+above threshold - a critical print size of roughly 0.2° (12 arcmin) of x-height
 for normally sighted readers, larger for older readers and much larger for
 anyone with low vision.
 

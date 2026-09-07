@@ -9,7 +9,7 @@ Same slide, four ways of seeing it. Under deuteranopia the two lines are the
 same colour and the legend is useless. About 8% of men in your audience are
 looking at the bottom-left panel.
 
-Two changes — a CVD-safe palette and direct labels instead of a legend — and it
+Two changes - a CVD-safe palette and direct labels instead of a legend - and it
 survives every simulation:
 
 ![After: blue/orange, dashed, directly labelled](assets/hero_after.png)
@@ -24,7 +24,7 @@ Point it at a deck, a poster or a figure. It reports, per slide:
   under protanopia or deuteranopia, measured as ΔE2000 after simulation
 - **Contrast failures** - with a threshold raised for projection, because
   ambient light lifts the black level and WCAG's numbers assume a monitor
-- **Text too small** — converted from real room geometry into a minimum font
+- **Text too small** - converted from real room geometry into a minimum font
   size, instead of the folk "30-point rule"
 
 Then it gives you the fix, not just the score.
@@ -35,21 +35,21 @@ Accessibility tooling is written for websites, by web developers, against a
 checklist. Slides are different: they are seen once, briefly, from 15 metres,
 through a projector, by an audience whose median age is 45.
 
-This skill is built on the vision science instead — dichromat simulation from
+This skill is built on the vision science instead - dichromat simulation from
 Viénot & Brettel, colour difference from CIEDE2000, and reading-size targets
 from the critical-print-size literature. Every threshold in it says where it
 came from.
 
 ## Installation
 
-### Claude Code — marketplace
+### Claude Code - marketplace
 
 ```
 /plugin marketplace add moecui22/accessible-slides
 /plugin install accessible-slides@accessible-slides
 ```
 
-### Claude Code — manual
+### Claude Code - manual
 
 ```bash
 git clone https://github.com/moecui22/accessible-slides.git
@@ -150,12 +150,12 @@ Stated plainly, because accessibility tools that overclaim are worse than none:
 
 ## Credits
 
-- Brettel, Viénot & Mollon (1997), *JOSA A* 14(10) — dichromat simulation
-- Viénot, Brettel & Mollon (1999), *Color Res. Appl.* 24(4) — linear-RGB simulation
-- Sharma, Wu & Dalal (2005), *Color Res. Appl.* 30(1) — CIEDE2000
-- Legge & Bigelow (2011), *Journal of Vision* 11(5):8 — critical print size
-- Okabe & Ito (2008) — colour universal design palette
-- W3C — WCAG 2.2
+- Brettel, Viénot & Mollon (1997), *JOSA A* 14(10) - dichromat simulation
+- Viénot, Brettel & Mollon (1999), *Color Res. Appl.* 24(4) - linear-RGB simulation
+- Sharma, Wu & Dalal (2005), *Color Res. Appl.* 30(1) - CIEDE2000
+- Legge & Bigelow (2011), *Journal of Vision* 11(5):8 - critical print size
+- Okabe & Ito (2008) - colour universal design palette
+- W3C - WCAG 2.2
 
 ## Citing this
 

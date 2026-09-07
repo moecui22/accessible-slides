@@ -18,7 +18,7 @@ ratio = (Lmax + 0.05) / (Lmin + 0.05)
 Why raise it for projection: WCAG's levels were set for self-luminous displays
 viewed at reading distance under controlled light. A projector adds ambient
 light to the black level, so the delivered ratio is strictly lower than the
-authored one — often by a large factor. Treating AAA as the projection floor is
+authored one - often by a large factor. Treating AAA as the projection floor is
 a deliberate, stated choice, not a misreading of the standard.
 
 Known limitation, state it if asked: the WCAG ratio is a poor model of perceived
@@ -35,14 +35,14 @@ substitute one for the other.
 
 | ΔE2000 after simulation | Verdict |
 |---|---|
-| < 5 | fail — effectively the same colour |
+| < 5 | fail - effectively the same colour |
 | 5–15 | fail for non-adjacent elements; marginal even when adjacent |
 | ≥ 15 | pass |
 
 The 15 threshold is a design heuristic, not a psychophysical constant. It is set
 above the "clearly different when compared side by side" range because slide
 elements are usually separated in space and time, seen briefly, and at low
-retinal illuminance — all of which raise the discrimination threshold.
+retinal illuminance - all of which raise the discrimination threshold.
 
 ## 3. Text size from room geometry
 
@@ -75,7 +75,7 @@ Worked values, 16:9 slide authored at 7.5 in = 540 pt, `r` = 0.52,
 | 3.0 m | 20 m | 36 pt |
 | 4.0 m | 25 m | 34 pt |
 
-This is where the folk "30-point rule" comes from — it is roughly right for a
+This is where the folk "30-point rule" comes from - it is roughly right for a
 mid-sized room and wrong at both ends. Compute it, do not recite it.
 
 ## 4. Greyscale survival

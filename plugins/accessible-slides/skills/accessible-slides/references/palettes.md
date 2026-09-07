@@ -14,15 +14,15 @@
 | Reddish purple | `#cc79a7` |
 
 Use in this order for categorical series. The first four are separable under
-both deutan and protan simulation. Yellow (`#f0e442`) has very high luminance —
+both deutan and protan simulation. Yellow (`#f0e442`) has very high luminance -
 use it for fills, not for text or thin lines on white.
 
 ## Safe two-colour contrasts
 
 When you need exactly two categories, use blue vs orange, not red vs green:
 
-- `#0072b2` / `#d55e00` — highest separation, works in every simulation
-- `#000000` / `#d55e00` — when one series should read as the reference
+- `#0072b2` / `#d55e00` - highest separation, works in every simulation
+- `#000000` / `#d55e00` - when one series should read as the reference
 
 ## Sequential and diverging
 
