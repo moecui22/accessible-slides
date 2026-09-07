@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accessible Slides — see your slide the way your audience does</title>
+<meta name="description" content="Drop in a slide and see it as a colour-blind viewer does, measure its contrast for a projected room, and get the smallest font the back row can read. Runs entirely in your browser.">
+<style>
+  :root {
+    --bg: #fbfaf8;
+    --panel: #ffffff;
+    --ink: #17171a;
+    --ink-soft: #5b5b66;
+    --line: #e2e0dc;
+    --line-strong: #cbc8c2;
+    --blue: #0072b2;
+    --orange: #d55e00;
+    --green: #009e73;
+    --accent-soft: #eaf3f9;
+    --pass: #146c43;
+    --warn: #8a5a00;
+    --fail: #b42318;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16161a;
+      --panel: #1e1e23;
+      --ink: #f2f1ee;
+      --ink-soft: #a9a7a1;
+      --line: #33333a;
+      --line-strong: #4a4a53;
+      --accent-soft: #14293a;
+      --pass: #5ec98a;
+      --warn: #e0a944;
+      --fail: #ff8f85;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 0 20px; }
+  header { padding: 56px 0 28px; }
+  h1 { font-size: 34px; line-height: 1.15; margin: 0 0 12px; letter-spacing: -0.02em; }
+  .lede { font-size: 19px; color: var(--ink-soft); margin: 0 0 22px; max-width: 640px; }
+  .lede strong { color: var(--ink); font-weight: 600; }
+  .toplinks { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .btn {
+    display: inline-block; padding: 9px 15px; border-radius: 7px;
+    border: 1px solid var(--line-strong); background: var(--panel);
+    color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 550;
+    cursor: pointer;
+  }
+  .btn:hover { border-color: var(--blue); color: var(--blue); }
+  .btn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .btn.primary:hover { background: #005c90; color: #fff; }
+  code.inline {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13.5px; background: var(--accent-soft); padding: 3px 7px; border-radius: 5px;
+  }
+  section { margin: 0 0 40px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: 12px; padding: 22px;
+  }
+  h2 { font-size: 21px; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .sub { color: var(--ink-soft); font-size: 15px; margin: 0 0 18px; max-width: 660px; }
+  .drop {
+    border: 1.5px dashed var(--line-strong); border-radius: 10px;
+    padding: 22px; text-align: center; color: var(--ink-soft); font-size: 14.5px;
+    cursor: pointer; transition: border-color .15s, background .15s;
+  }
+  .drop:hover, .drop.over { border-color: var(--blue); background: var(--accent-soft); }
+  .panels {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 18px;
+  }
+  @media (max-width: 640px) { .panels { grid-template-columns: 1fr; } }
+  .panel h3 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: .06em;
+    color: var(--ink-soft); margin: 0 0 7px; font-weight: 600;
+  }
+  .panel canvas {
+    width: 100%; height: auto; display: block;
+    border: 1px solid var(--line); border-radius: 7px; background: #fff;
+  }
+  .panel .note { font-size: 13px; color: var(--ink-soft); margin: 7px 0 0; min-height: 1.3em; }
+  .row { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 12.5px; color: var(--ink-soft); font-weight: 600; letter-spacing: .02em; }
+  input[type=text], input[type=number] {
+    font: inherit; font-size: 14.5px; padding: 8px 10px; border-radius: 7px;
+    border: 1px solid var(--line-strong); background: var(--bg); color: var(--ink);
+    width: 130px;
+  }
+  input[type=color] {
+    width: 46px; height: 38px; padding: 2px; border: 1px solid var(--line-strong);
+    border-radius: 7px; background: var(--bg); cursor: pointer;
+  }
+  .pair { display: flex; gap: 7px; align-items: center; }
+  .verdict { margin-top: 18px; }
+  .big {
+    font-size: 30px; font-weight: 650; letter-spacing: -0.02em; margin: 0 0 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .swatchbar {
+    display: inline-block; padding: 10px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 15px; margin-top: 10px;
+    border: 1px solid var(--line);
+  }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; margin-top: 14px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); font-weight: 600; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .tag { font-weight: 700; font-size: 12.5px; letter-spacing: .04em; }
+  .pass { color: var(--pass); }
+  .warn { color: var(--warn); }
+  .fail { color: var(--fail); }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px;
+  }
+  .dot { width: 13px; height: 13px; border-radius: 3px; border: 1px solid rgba(0,0,0,.25); flex: none; }
+  .scroll { overflow-x: auto; }
+  .fix {
+    margin-top: 14px; padding: 12px 14px; border-left: 3px solid var(--orange);
+    background: var(--accent-soft); border-radius: 0 7px 7px 0; font-size: 14.5px;
+  }
+  footer {
+    border-top: 1px solid var(--line); margin-top: 20px; padding: 26px 0 50px;
+    color: var(--ink-soft); font-size: 14px;
+  }
+  footer a { color: var(--blue); }
+  .privacy { font-size: 13px; color: var(--ink-soft); margin-top: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>See your slide the way your audience does</h1>
+  <p class="lede">About <strong>1 in 12 men</strong> in the room cannot separate your red line from your green one, and the back row is reading text a third the size you think it is. This page measures all of it. <strong>Nothing leaves your browser.</strong></p>
+  <div class="toplinks">
+    <a class="btn primary" href="https://github.com/moecui22/accessible-slides">Get the skill on GitHub</a>
+    <code class="inline">npx skills add moecui22/accessible-slides</code>
+  </div>
+</header>
+
+<section>
+  <div class="card">
+    <h2>1. Colour vision</h2>
+    <p class="sub">Drop in a slide, a poster or a figure. It is redrawn as a viewer with protanopia or deuteranopia sees it, using the Viénot–Brettel–Mollon transform in linear light. Greyscale is the fourth test: any distinction that survives greyscale survives everything.</p>
+    <div class="drop" id="drop">
+      <strong>Drop an image here</strong> or click to choose one &nbsp;·&nbsp; PNG, JPG, WebP
+      <input type="file" id="file" accept="image/*" hidden>
+    </div>
+    <div class="panels" id="panels">
+      <div class="panel"><h3>Normal vision</h3><canvas id="cv-normal"></canvas><p class="note">Click anywhere to sample a colour into the contrast check below.</p></div>
+      <div class="panel"><h3>Protanopia — no red cone</h3><canvas id="cv-protan"></canvas><p class="note">~1% of men.</p></div>
+      <div class="panel"><h3>Deuteranopia — no green cone</h3><canvas id="cv-deutan"></canvas><p class="note">~1% of men, and the most common serious form.</p></div>
+      <div class="panel"><h3>Greyscale</h3><canvas id="cv-grey"></canvas><p class="note">Also what a photocopy and a bad projector do.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <h2>2. Contrast, for a projector rather than your laptop</h2>
+    <p class="sub">Room light washes out blacks, so a projected slide always arrives worse than it looked when you made it. That is why the lit-room target is stricter than the WCAG web minimum.</p>
+    <div class="row">
+      <div class="field">
+        <label for="fg">Text colour</label>
+        <div class="pair"><input type="color" id="fg-pick" value="#8a8a8a"><input type="text" id="fg" value="#8a8a8a"></div>
+      </div>
+      <div class="field">
+        <label for="bg">Background</label>
+        <div class="pair"><input type="color" id="bg-pick" value="#ffffff"><input type="text" id="bg" value="#ffffff"></div>
+      </div>
+      <button class="btn" id="sample-fg">Sample text colour from image</button>
+      <button class="btn" id="sample-bg">Sample background from image</button>
+    </div>
+    <div class="verdict">
+      <p class="big" id="ratio">—</p>
+      <div class="swatchbar" id="swatchbar">The quick brown fox jumps over the lazy dog</div>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Where</th><th>Needs</th><th>Verdict</th></tr></thead>
+          <tbody id="contrast-rows"></tbody>
+        </table>
+      </div>
+      <div class="fix" id="contrast-fix" hidden></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <h2>3. Colours that mean different things</h2>
+    <p class="sub">Two colours carrying different meanings need to stay apart after simulation. The threshold is a CIEDE2000 difference of 15; below 5 they are the same colour to that viewer. Default matplotlib red and green fail badly, which is the single most common slide error there is.</p>
+    <div class="row">
+      <div class="field" style="flex:1; min-width:260px">
+        <label for="palette">Palette — comma-separated hex</label>
+        <input type="text" id="palette" value="#d62728, #2ca02c, #1f77b4" style="width:100%">
+      </div>
+      <button class="btn" id="use-okabe">Load the Okabe–Ito palette</button>
+    </div>
+    <div id="chips" style="margin-top:12px; display:flex; gap:14px; flex-wrap:wrap"></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Pair</th><th>Normal</th><th>Protan</th><th>Deutan</th><th>Tritan</th><th>Verdict</th></tr></thead>
+        <tbody id="palette-rows"></tbody>
+      </table>
+    </div>
+    <div class="fix" id="palette-fix" hidden></div>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <h2>4. Text size comes from the room, not from taste</h2>
+    <p class="sub">"Use 30 point" is a guess. The real constraint is angular: the back row needs roughly 16–20 arcminutes of x-height. Give the geometry and it becomes a font size.</p>
+    <div class="row">
+      <div class="field"><label for="dist">Back row (m)</label><input type="number" id="dist" value="15" min="1" max="60" step="0.5"></div>
+      <div class="field"><label for="screen">Screen height (m)</label><input type="number" id="screen" value="2" min="0.2" max="10" step="0.1"></div>
+      <div class="field"><label for="slideh">Slide height (pt)</label><input type="number" id="slideh" value="540" min="100" max="2000" step="10"></div>
+      <div class="field"><label for="font">Your font size (pt)</label><input type="number" id="font" value="22" min="4" max="200" step="1"></div>
+    </div>
+    <div class="verdict">
+      <p class="big" id="font-verdict">—</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>x-height at the back row</th><th>Minimum font</th><th></th></tr></thead>
+          <tbody id="room-rows"></tbody>
+        </table>
+      </div>
+      <div class="fix" id="room-fix" hidden></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Accessible Slides</strong> — a skill for coding agents that audits and fixes slides, posters and figures for readers with vision loss. This page is the same arithmetic, run in your browser. The skill goes further: it reads <code class="inline">.pptx</code>, HTML and PDF directly, and returns the fixes.</p>
+  <p><a href="https://github.com/moecui22/accessible-slides">github.com/moecui22/accessible-slides</a> · MIT · Eric Cui, <a href="https://orcid.org/0009-0002-4307-589X">ORCID 0009-0002-4307-589X</a></p>
+  <p class="privacy">Methods: Viénot, Brettel &amp; Mollon (1999) and Brettel, Viénot &amp; Mollon (1997) for dichromat simulation; CIEDE2000 for colour difference; WCAG 2.1 relative luminance for contrast; critical-print-size research for the angular text target. Images are processed on a canvas in your own browser and are never uploaded anywhere.</p>
+</footer>
+
+</div>
+
+<script>
+"use strict";
+
+/* ---------- colour maths, ported from scripts/audit.py ---------- */
+
+const RGB2LMS = [[17.8824, 43.5161, 4.11935],
+                 [3.45565, 27.1554, 3.86714],
+                 [0.0299566, 0.184309, 1.46709]];
+const LMS2RGB = [[0.0809444479, -0.130504409, 0.116721066],
+                 [-0.0102485335, 0.0540193266, -0.113614708],
+                 [-0.000365296938, -0.00412161469, 0.693511405]];
+
+function mul(m, v) {
+  return [m[0][0]*v[0] + m[0][1]*v[1] + m[0][2]*v[2],
+          m[1][0]*v[0] + m[1][1]*v[1] + m[1][2]*v[2],
+          m[2][0]*v[0] + m[2][1]*v[1] + m[2][2]*v[2]];
+}
+function toLinear(v) { return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+function toSrgb(v) {
+  v = Math.min(1, Math.max(0, v));
+  return v <= 0.0031308 ? v * 12.92 : 1.055 * Math.pow(v, 1 / 2.4) - 0.055;
+}
+function hexRgb(h) {
+  h = String(h).trim().replace(/^#/, "");
+  if (h.length === 3) h = h.split("").map(c => c + c).join("");
+  if (!/^[0-9a-fA-F]{6}$/.test(h)) return null;
+  return [parseInt(h.slice(0,2),16)/255, parseInt(h.slice(2,4),16)/255, parseInt(h.slice(4,6),16)/255];
+}
+function rgbHex(c) {
+  return "#" + c.map(v => Math.min(255, Math.max(0, Math.round(v * 255))).toString(16).padStart(2, "0")).join("");
+}
+function luminance(c) {
+  const [r, g, b] = c.map(toLinear);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+function contrast(c1, c2) {
+  const a = luminance(c1), b = luminance(c2);
+  return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+}
+function simulate(c, kind) {
+  const lin = c.map(toLinear);
+  let [L, M, S] = mul(RGB2LMS, lin);
+  if (kind === "protan") L = 2.02344 * M - 2.52581 * S;
+  else if (kind === "deutan") M = 0.494207 * L + 1.24827 * S;
+  else if (kind === "tritan") S = -0.395913 * L + 0.801109 * M;
+  return mul(LMS2RGB, [L, M, S]).map(toSrgb);
+}
+function rgbLab(c) {
+  const [r, g, b] = c.map(toLinear);
+  const X = 0.4124564*r + 0.3575761*g + 0.1804375*b;
+  const Y = 0.2126729*r + 0.7151522*g + 0.0721750*b;
+  const Z = 0.0193339*r + 0.1191920*g + 0.9503041*b;
+  const f = t => t > Math.pow(6/29, 3) ? Math.cbrt(t) : t / (3 * Math.pow(6/29, 2)) + 4/29;
+  const fx = f(X / 0.95047), fy = f(Y / 1.0), fz = f(Z / 1.08883);
+  return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
+}
+function ciede2000(lab1, lab2) {
+  const rad = d => d * Math.PI / 180, deg = r => r * 180 / Math.PI;
+  const [L1, a1, b1] = lab1, [L2, a2, b2] = lab2;
+  const C1 = Math.hypot(a1, b1), C2 = Math.hypot(a2, b2);
+  const Cb = (C1 + C2) / 2;
+  const G = Cb > 0 ? 0.5 * (1 - Math.sqrt(Math.pow(Cb,7) / (Math.pow(Cb,7) + Math.pow(25,7)))) : 0.5;
+  const a1p = (1 + G) * a1, a2p = (1 + G) * a2;
+  const C1p = Math.hypot(a1p, b1), C2p = Math.hypot(a2p, b2);
+  const h1p = ((deg(Math.atan2(b1, a1p)) % 360) + 360) % 360;
+  const h2p = ((deg(Math.atan2(b2, a2p)) % 360) + 360) % 360;
+  const dLp = L2 - L1, dCp = C2p - C1p;
+  let dhp = 0;
+  if (C1p * C2p !== 0) {
+    dhp = h2p - h1p;
+    if (dhp > 180) dhp -= 360; else if (dhp < -180) dhp += 360;
+  }
+  const dHp = 2 * Math.sqrt(C1p * C2p) * Math.sin(rad(dhp / 2));
+  const Lbp = (L1 + L2) / 2, Cbp = (C1p + C2p) / 2;
+  let hbp;
+  if (C1p * C2p === 0) hbp = h1p + h2p;
+  else if (Math.abs(h1p - h2p) > 180) hbp = (h1p + h2p) < 360 ? (h1p + h2p + 360) / 2 : (h1p + h2p - 360) / 2;
+  else hbp = (h1p + h2p) / 2;
+  const T = 1 - 0.17 * Math.cos(rad(hbp - 30)) + 0.24 * Math.cos(rad(2 * hbp))
+              + 0.32 * Math.cos(rad(3 * hbp + 6)) - 0.20 * Math.cos(rad(4 * hbp - 63));
+  const dT = 30 * Math.exp(-Math.pow((hbp - 275) / 25, 2));
+  const Rc = Cbp > 0 ? 2 * Math.sqrt(Math.pow(Cbp,7) / (Math.pow(Cbp,7) + Math.pow(25,7))) : 0;
+  const Sl = 1 + (0.015 * Math.pow(Lbp - 50, 2)) / Math.sqrt(20 + Math.pow(Lbp - 50, 2));
+  const Sc = 1 + 0.045 * Cbp;
+  const Sh = 1 + 0.015 * Cbp * T;
+  const Rt = -Math.sin(rad(2 * dT)) * Rc;
+  return Math.sqrt(Math.pow(dLp/Sl, 2) + Math.pow(dCp/Sc, 2) + Math.pow(dHp/Sh, 2)
+                   + Rt * (dCp/Sc) * (dHp/Sh));
+}
+function minFont(distance, screenH, arcmin, xratio, slideUnits) {
+  const theta = (arcmin / 60) * Math.PI / 180;
+  const xh = 2 * distance * Math.tan(theta / 2);
+  return (xh / xratio) / screenH * slideUnits;
+}
+function arcminOf(fontUnits, distance, screenH, xratio, slideUnits) {
+  const xh = (fontUnits / slideUnits * screenH) * xratio;
+  return 2 * Math.atan(xh / (2 * distance)) * 180 / Math.PI * 60;
+}
+
+/* ---------- panel 1: image simulation ---------- */
+
+const MAX_W = 560;
+const canvases = {
+  normal: document.getElementById("cv-normal"),
+  protan: document.getElementById("cv-protan"),
+  deutan: document.getElementById("cv-deutan"),
+  grey:   document.getElementById("cv-grey")
+};
+let sourceData = null;
+
+function renderImage(img) {
+  const scale = Math.min(1, MAX_W / img.width);
+  const w = Math.max(1, Math.round(img.width * scale));
+  const h = Math.max(1, Math.round(img.height * scale));
+  const base = canvases.normal;
+  base.width = w; base.height = h;
+  const bctx = base.getContext("2d", { willReadFrequently: true });
+  bctx.fillStyle = "#ffffff";
+  bctx.fillRect(0, 0, w, h);
+  bctx.drawImage(img, 0, 0, w, h);
+  sourceData = bctx.getImageData(0, 0, w, h);
+
+  for (const kind of ["protan", "deutan", "grey"]) {
+    const cv = canvases[kind];
+    cv.width = w; cv.height = h;
+    const ctx = cv.getContext("2d");
+    const out = ctx.createImageData(w, h);
+    const src = sourceData.data, dst = out.data;
+    for (let i = 0; i < src.length; i += 4) {
+      const c = [src[i] / 255, src[i+1] / 255, src[i+2] / 255];
+      let o;
+      if (kind === "grey") {
+        const y = toSrgb(luminance(c));
+        o = [y, y, y];
+      } else {
+        o = simulate(c, kind);
+      }
+      dst[i]   = Math.round(Math.min(1, Math.max(0, o[0])) * 255);
+      dst[i+1] = Math.round(Math.min(1, Math.max(0, o[1])) * 255);
+      dst[i+2] = Math.round(Math.min(1, Math.max(0, o[2])) * 255);
+      dst[i+3] = src[i+3];
+    }
+    ctx.putImageData(out, 0, 0);
+  }
+}
+
+function loadFile(file) {
+  if (!file || !file.type.startsWith("image/")) return;
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = () => { renderImage(img); URL.revokeObjectURL(url); };
+  img.src = url;
+}
+
+const drop = document.getElementById("drop");
+const fileInput = document.getElementById("file");
+drop.addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", e => loadFile(e.target.files[0]));
+["dragenter", "dragover"].forEach(ev =>
+  drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(ev =>
+  drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => loadFile(e.dataTransfer.files[0]));
+
+/* a sample slide, so the page is not empty on arrival */
+function drawSample() {
+  const w = 560, h = 315;
+  const cv = document.createElement("canvas");
+  cv.width = w; cv.height = h;
+  const c = cv.getContext("2d");
+  c.fillStyle = "#ffffff"; c.fillRect(0, 0, w, h);
+  c.fillStyle = "#1a1a1a";
+  c.font = "600 22px -apple-system, Helvetica, Arial, sans-serif";
+  c.fillText("Treatment vs control", 34, 42);
+  c.strokeStyle = "#c9c9c9"; c.lineWidth = 1;
+  c.beginPath(); c.moveTo(34, 62); c.lineTo(34, 258); c.lineTo(524, 258); c.stroke();
+  const series = [
+    { colour: "#d62728", label: "Treatment", pts: [0.30, 0.42, 0.51, 0.63, 0.74, 0.86] },
+    { colour: "#2ca02c", label: "Control",   pts: [0.28, 0.36, 0.40, 0.47, 0.52, 0.58] }
+  ];
+  c.lineWidth = 3.5;
+  series.forEach(s => {
+    c.strokeStyle = s.colour;
+    c.beginPath();
+    s.pts.forEach((p, i) => {
+      const x = 34 + (i / (s.pts.length - 1)) * 470;
+      const y = 258 - p * 190;
+      i === 0 ? c.moveTo(x, y) : c.lineTo(x, y);
+    });
+    c.stroke();
+  });
+  c.font = "15px -apple-system, Helvetica, Arial, sans-serif";
+  series.forEach((s, i) => {
+    c.fillStyle = s.colour;
+    c.fillRect(392, 74 + i * 24, 16, 10);
+    c.fillStyle = "#3a3a3a";
+    c.fillText(s.label, 416, 84 + i * 24);
+  });
+  c.fillStyle = "#8a8a8a";
+  c.font = "13px -apple-system, Helvetica, Arial, sans-serif";
+  c.fillText("Source: illustrative data, not a real study", 34, 288);
+  const img = new Image();
+  img.onload = () => renderImage(img);
+  img.src = cv.toDataURL();
+}
+drawSample();
+
+/* ---------- panel 2: contrast ---------- */
+
+const fg = document.getElementById("fg"), bg = document.getElementById("bg");
+const fgPick = document.getElementById("fg-pick"), bgPick = document.getElementById("bg-pick");
+let sampleTarget = null;
+
+function nearestNeutral(bgc, need) {
+  const bgl = luminance(bgc);
+  const darkBg = bgl < 0.5;
+  let best = null;
+  const range = darkBg ? [...Array(256).keys()].reverse() : [...Array(256).keys()];
+  for (const v of range) {
+    const cand = [v/255, v/255, v/255];
+    const cl = luminance(cand);
+    if ((Math.max(cl, bgl) + 0.05) / (Math.min(cl, bgl) + 0.05) >= need) best = cand;
+    else if (best) break;
+  }
+  return best;
+}
+
+function updateContrast() {
+  const f = hexRgb(fg.value), b = hexRgb(bg.value);
+  const rows = document.getElementById("contrast-rows");
+  const fix = document.getElementById("contrast-fix");
+  if (!f || !b) { document.getElementById("ratio").textContent = "—"; rows.innerHTML = ""; return; }
+  fgPick.value = rgbHex(f); bgPick.value = rgbHex(b);
+  const ratio = contrast(f, b);
+  document.getElementById("ratio").textContent = ratio.toFixed(2) + " : 1";
+  const bar = document.getElementById("swatchbar");
+  bar.style.color = rgbHex(f); bar.style.background = rgbHex(b);
+  const targets = [
+    ["Projected, lit room — body text", 7.0],
+    ["Projected, dark room — body text", 4.5],
+    ["Screen share, WCAG AA — body text", 4.5],
+    ["Large text, anywhere", 3.0]
+  ];
+  rows.innerHTML = targets.map(([label, need]) => {
+    const ok = ratio >= need;
+    return `<tr><td>${label}</td><td class="num">${need.toFixed(1)} : 1</td>
+      <td class="tag ${ok ? "pass" : "fail"}">${ok ? "PASS" : "FAIL"}</td></tr>`;
+  }).join("");
+  const missing = targets.filter(([, need]) => ratio < need).map(([, need]) => need);
+  if (missing.length) {
+    const need = Math.max(...missing);
+    const cand = nearestNeutral(b, need);
+    fix.hidden = false;
+    fix.innerHTML = cand
+      ? `<strong>Fix:</strong> the nearest neutral that clears ${need.toFixed(1)}:1 is
+         <span class="chip"><span class="dot" style="background:${rgbHex(cand)}"></span>${rgbHex(cand)}</span>
+         at ${contrast(cand, b).toFixed(2)}:1.`
+      : `<strong>Fix:</strong> no neutral text colour clears ${need.toFixed(1)}:1 on this background. Change the background.`;
+  } else {
+    fix.hidden = true;
+  }
+}
+[fg, bg].forEach(el => el.addEventListener("input", updateContrast));
+fgPick.addEventListener("input", () => { fg.value = fgPick.value; updateContrast(); });
+bgPick.addEventListener("input", () => { bg.value = bgPick.value; updateContrast(); });
+document.getElementById("sample-fg").addEventListener("click", () => { sampleTarget = "fg"; });
+document.getElementById("sample-bg").addEventListener("click", () => { sampleTarget = "bg"; });
+canvases.normal.addEventListener("click", e => {
+  if (!sourceData) return;
+  const rect = canvases.normal.getBoundingClientRect();
+  const x = Math.floor((e.clientX - rect.left) / rect.width * canvases.normal.width);
+  const y = Math.floor((e.clientY - rect.top) / rect.height * canvases.normal.height);
+  const i = (y * sourceData.width + x) * 4;
+  const hex = rgbHex([sourceData.data[i]/255, sourceData.data[i+1]/255, sourceData.data[i+2]/255]);
+  const target = sampleTarget || "fg";
+  (target === "fg" ? fg : bg).value = hex;
+  sampleTarget = null;
+  updateContrast();
+});
+updateContrast();
+
+/* ---------- panel 3: palette separability ---------- */
+
+const OKABE = "#000000, #e69f00, #56b4e9, #009e73, #f0e442, #0072b2, #d55e00, #cc79a7";
+const paletteInput = document.getElementById("palette");
+
+function updatePalette() {
+  const hexes = paletteInput.value.split(",").map(s => s.trim()).filter(Boolean);
+  const cols = hexes.map(h => [h, hexRgb(h)]).filter(p => p[1]);
+  document.getElementById("chips").innerHTML = cols.map(([h, c]) =>
+    `<span class="chip"><span class="dot" style="background:${rgbHex(c)}"></span>${h}</span>`).join("");
+  const rows = [];
+  let worst = null;
+  for (let i = 0; i < cols.length; i++) {
+    for (let j = i + 1; j < cols.length; j++) {
+      const [h1, c1] = cols[i], [h2, c2] = cols[j];
+      const vals = ["normal", "protan", "deutan", "tritan"].map(kind => {
+        const s1 = kind === "normal" ? c1 : simulate(c1, kind);
+        const s2 = kind === "normal" ? c2 : simulate(c2, kind);
+        return ciede2000(rgbLab(s1), rgbLab(s2));
+      });
+      const lo = Math.min(vals[1], vals[2], vals[3]);
+      const cls = lo >= 15 ? "pass" : (lo >= 5 ? "warn" : "fail");
+      const tag = lo >= 15 ? "PASS" : (lo >= 5 ? "MARGINAL" : "FAIL");
+      if (!worst || lo < worst.lo) worst = { lo, h1, h2 };
+      rows.push(`<tr>
+        <td><span class="chip"><span class="dot" style="background:${rgbHex(c1)}"></span></span>
+            <span class="chip"><span class="dot" style="background:${rgbHex(c2)}"></span>${h1} / ${h2}</span></td>
+        ${vals.map(v => `<td class="num">${v.toFixed(1)}</td>`).join("")}
+        <td class="tag ${cls}">${tag}</td></tr>`);
+    }
+  }
+  document.getElementById("palette-rows").innerHTML =
+    rows.join("") || `<tr><td colspan="6">Enter two or more hex colours.</td></tr>`;
+  const fix = document.getElementById("palette-fix");
+  if (worst && worst.lo < 15) {
+    fix.hidden = false;
+    fix.innerHTML = `<strong>Worst pair:</strong> ${worst.h1} against ${worst.h2}, down to
+      ΔE2000 ${worst.lo.toFixed(1)} under simulation. Either recolour from a colour-blind-safe
+      palette, or add a second channel that does not depend on colour at all — a dash pattern,
+      a hatch, a marker shape, or a label sitting on the line.`;
+  } else {
+    fix.hidden = true;
+  }
+}
+paletteInput.addEventListener("input", updatePalette);
+document.getElementById("use-okabe").addEventListener("click", () => {
+  paletteInput.value = OKABE; updatePalette();
+});
+updatePalette();
+
+/* ---------- panel 4: text size ---------- */
+
+const dist = document.getElementById("dist"), screenH = document.getElementById("screen");
+const slideH = document.getElementById("slideh"), fontIn = document.getElementById("font");
+
+function updateRoom() {
+  const d = parseFloat(dist.value), h = parseFloat(screenH.value);
+  const units = parseFloat(slideH.value), f = parseFloat(fontIn.value);
+  if (!(d > 0 && h > 0 && units > 0)) return;
+  const XR = 0.52;
+  document.getElementById("room-rows").innerHTML = [12, 16, 18, 20, 24].map(a => {
+    const pt = minFont(d, h, a, XR, units);
+    const note = a === 18 ? "target" : (a === 12 ? "legibility floor" : "");
+    return `<tr><td class="num">${a} arcmin</td><td class="num">${pt.toFixed(1)} pt</td>
+            <td style="color:var(--ink-soft)">${note}</td></tr>`;
+  }).join("");
+  const out = document.getElementById("font-verdict");
+  const fix = document.getElementById("room-fix");
+  if (f > 0) {
+    const got = arcminOf(f, d, h, XR, units);
+    const need = minFont(d, h, 18, XR, units);
+    const ok = f >= need;
+    out.innerHTML = `${f.toFixed(0)} pt reads as <span class="${ok ? "pass" : "fail"}">${got.toFixed(1)} arcmin</span> at the back row`;
+    fix.hidden = ok;
+    if (!ok) fix.innerHTML = `<strong>Fix:</strong> go to ${Math.ceil(need)} pt, or move the back row
+      closer than ${(d * f / need).toFixed(1)} m, or use a taller screen. Angular size is the only
+      thing the eye responds to; the three trade off exactly.`;
+  } else {
+    out.textContent = "—";
+    fix.hidden = true;
+  }
+}
+[dist, screenH, slideH, fontIn].forEach(el => el.addEventListener("input", updateRoom));
+updateRoom();
+</script>
+</body>
+</html>

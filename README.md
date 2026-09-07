@@ -14,6 +14,8 @@ a legend.
 
 ![The fixed version in blue and orange, with dashed lines and direct labels](assets/hero_after.png)
 
+**[Try it in your browser](https://moecui22.github.io/accessible-slides/)** — drop in a slide and see the four panels, the contrast numbers and the minimum font size, with nothing uploaded anywhere.
+
 ---
 
 ## Who this is for
