@@ -11,6 +11,15 @@ npx skills add moecui22/accessible-slides
 
 Works with any harness that reads the Agent Skills format.
 
+This form clones the whole repository into the skill directory: about 2 MB, and
+it carries the demo assets, the tests and the two packaging copies along with
+it. To install only the skill — `SKILL.md`, `references/` and `scripts/`, 36 KB
+— point at it directly:
+
+```bash
+npx skills add https://github.com/moecui22/accessible-slides/tree/main/plugins/accessible-slides/skills/accessible-slides
+```
+
 ## Claude Code
 
 **As a plugin:**

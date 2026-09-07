@@ -55,6 +55,13 @@ Then it tells you what to change. Not just a score.
 npx skills add moecui22/accessible-slides
 ```
 
+That pulls the whole repo (about 2 MB, including the demo assets and tests). For
+just the skill — 36 KB, nothing else:
+
+```bash
+npx skills add https://github.com/moecui22/accessible-slides/tree/main/plugins/accessible-slides/skills/accessible-slides
+```
+
 Claude Code, Cursor, other agents, or no agent at all: see
 **[INSTALL.md](INSTALL.md)**.
 
