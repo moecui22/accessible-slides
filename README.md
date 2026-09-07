@@ -140,10 +140,11 @@ none:
 - The colour separation threshold is a design choice, not a law of nature.
 - It cannot tell you whether the slide was worth showing.
 
-## Where the numbers come from
+## Relevant publications and further reading
 
-Every threshold traces to published work rather than to taste. Links below go to
-pages that actually open; DOIs are given for the paywalled ones.
+The thresholds used here draw on the work below, which is also a good starting
+point if you would like to read further. Links point to freely available pages
+where possible, with DOIs listed for the paywalled ones.
 
 - **Colour blindness simulation:** Brettel, Viénot & Mollon (1997),
   [*JOSA A* 14(10), 2647](https://opg.optica.org/josaa/abstract.cfm?uri=josaa-14-10-2647)
