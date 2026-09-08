@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="accessible-slides: two rising lines told apart by dash pattern, not by colour">
+  <title>accessible-slides</title>
+  <rect width="512" height="512" rx="114" ry="114" fill="#0072b2"/>
+
+  <!-- two series that stay apart in greyscale: one solid, one dashed -->
+  <g fill="none" stroke="#ffffff" stroke-width="26" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M104 356 L196 300 L288 236 L408 148"/>
+  </g>
+  <g fill="none" stroke="#ffffff" stroke-width="26" stroke-linecap="butt" stroke-linejoin="round"
+     stroke-dasharray="44 40">
+    <path d="M104 400 L196 374 L288 348 L392 306"/>
+  </g>
+
+  <!-- the end-of-line labels that replace a legend -->
+  <circle cx="408" cy="148" r="24" fill="#ffffff"/>
+  <circle cx="408" cy="300" r="24" fill="#ffffff"/>
+</svg>
